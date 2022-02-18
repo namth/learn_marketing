@@ -34,6 +34,10 @@ function my_custom_template($single) {
         return plugin_dir_path( __FILE__ ) . 'single-bai_hoc.php';
     }
 
+    if ( 'khoa_hoc' === $post->post_type && locate_template( array( 'single-khoa_hoc.php' ) ) !== $template ) {
+        return plugin_dir_path( __FILE__ ) . 'single-khoa_hoc.php';
+    }
+
     return $single;
 
 }
