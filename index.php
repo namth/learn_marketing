@@ -15,6 +15,7 @@ Author URI: http://9outfit.com
 $dir = dirname( __FILE__ );
 require_once( $dir . '/inc/custom_post.php');
 require_once( $dir . '/inc/custom_field.php');
+require_once( $dir . '/template/index.php');
 
 /* Filter the single_template with our custom function*/
 add_filter('single_template', 'my_custom_template');
