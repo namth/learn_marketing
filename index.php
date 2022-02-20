@@ -46,6 +46,7 @@ add_action( 'wp_enqueue_scripts', 'learn_mkt_init' );
 function learn_mkt_init() {
     wp_enqueue_style( 'style', plugins_url( 'assets/css/style.css', __FILE__ ), array(), '1.0' );
 
+    wp_enqueue_script( 'fontawesome', 'https://kit.fontawesome.com/dfe5b27416.js', array( 'jquery' ), '5.0', true );
     wp_enqueue_script( 'es6-promise', plugins_url( 'assets/js/es6-promise.auto.min.js', __FILE__ ), array( 'jquery' ), '1.0', true );
     wp_enqueue_script( 'jspdf', plugins_url( 'assets/js/jspdf.min.js', __FILE__ ), array( 'jquery' ), '1.0', true );
     wp_enqueue_script( 'html2canvas', plugins_url( 'assets/js/html2canvas.min.js', __FILE__ ), array( 'jquery' ), '1.0', true );

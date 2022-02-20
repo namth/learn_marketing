@@ -55,3 +55,36 @@
     width: initial !important;
     margin-right: 20px;
 }
+.lessons_list{
+    list-style: none;
+    border-radius: 10px;
+    border: 1px solid #444;
+    padding: 10px 0;
+    margin: 0;
+}
+.lessons_list li{
+    margin: 0 !important;
+    padding: 8px 20px;
+}
+.lessons_list li .locked{
+    position: absolute;
+    right: 20px;
+}
+.lessons_list.active li:hover{
+    background: blanchedalmond;
+}
+.lessons_list svg.fa-book{
+    padding-right: 10px;
+}
+.lessons_list.not_active {
+    background: #5e5e5e;
+}
+.lessons_list.not_active li:hover{
+    background: #575757;
+}
+.warning{
+    display: block;
+    color: red;
+    font-style: italic;
+    margin-bottom: 15px;
+}
