@@ -26,7 +26,13 @@ function active_account() {
             $code_active = base64_encode($current_user->ID . "|" . $current_user->user_email);
             $link_active = get_permalink() . "?active=" . $code_active;
 
-            print_r($link_active);
+            // print_r($link_active);
+            # Gửi email kích hoạt 
+            $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
+            $to = $current_user->user_email;
+            $email_title = 'Kích hoạt tài khoản học marketing';
+            $email_content = 'Bạn hãy bấm vào link dưới đây để kích hoạt tài khoản: ' . $link_active;
+            wp_mail($to, $email_title, $email_content, $headers);
         }
     ?>
         
@@ -45,3 +51,8 @@ function active_account() {
     }
     echo '</div>';
 }
+
+/* add_shortcode( "register_account", "register_account" );
+function register_account() {
+
+} */

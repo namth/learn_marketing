@@ -59,21 +59,34 @@
     list-style: none;
     border-radius: 10px;
     border: 1px solid #444;
-    padding: 10px 0;
+    padding: 0;
     margin: 0;
 }
 .lessons_list li{
     margin: 0 !important;
+    position: relative;
+}
+.lessons_list li a{
+    display: block;
     padding: 8px 20px;
 }
 .lessons_list li .locked{
     position: absolute;
     right: 20px;
+    bottom: 12px;
 }
-.lessons_list.active li:hover{
-    background: blanchedalmond;
+.lessons_list li .check_done{
+    position: absolute;
+    right: 20px;
+    font-size: 28px;
+    color: #3abf0a;
+    bottom: 5px;
 }
-.lessons_list svg.fa-book{
+.lessons_list.active li:not(.lesson_lock):hover, .current_lesson{
+    background: #f2ffcd;
+    border-radius: 10px;
+}
+.lessons_list svg, .course_list svg{
     padding-right: 10px;
 }
 .lessons_list.not_active {
@@ -82,9 +95,87 @@
 .lessons_list.not_active li:hover{
     background: #575757;
 }
+.lesson_lock{
+    background: #bbb;
+    padding: 8px 20px;
+}
 .warning{
     display: block;
     color: red;
     font-style: italic;
     margin-bottom: 15px;
+}
+#active_account{
+    text-align: center;
+}
+.align_right{
+    text-align: right;
+}
+.course_list{
+    padding: 0;
+    margin: 0;
+}
+.course_list li{
+    list-style: none;
+    border-radius: 10px;
+    border: 1px solid #444;
+    padding: 0;
+    margin-left: 0 !important;
+    margin-bottom: 4px;
+}
+.course_list li a{
+    display: block;
+    padding: 8px 15px;
+}
+.course_list li:hover a{
+    background: #f2ffcd;
+    border-radius: 10px;
+}
+.pagination{
+    text-align: center;
+    margin-top: 15px;
+    color: #4b8623;
+}
+.pagination li{
+    list-style: none;
+    display: inline;
+    margin: 0 !important;
+    padding: 5px 10px;
+    background: #d8ff4e;
+    border-radius: 5px;
+}
+.add_new_user {
+    display: block;
+    margin-top: 20px;
+}
+.add_new_user button {
+    margin: 0;
+    border-radius: 8px;
+}
+.add_new_user form{
+    display: none;
+}
+.add_new_user label, .add_new_user input[type="text"], .add_new_user input[type="submit"]{
+    display: inline-flex;
+    vertical-align: inherit;
+    width: initial;
+    margin-right: 8px;
+    border-radius: 8px;
+}
+button.closed_button{
+    border: 1px solid red;
+    padding: 0 11px;
+    min-height: 35px;
+    display: inline-block;
+    height: 35px;
+    line-height: 30px;
+    vertical-align: unset;
+    border-radius: 20px;
+    background: #df0000;
+    color: white;
+}
+.user_info *{
+    display: block;
+    text-align: center;
+    margin: 0 auto;
 }
