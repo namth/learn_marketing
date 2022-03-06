@@ -30,16 +30,40 @@ function my_custom_template($single) {
     * theme or child theme directories, so load it
     * from our plugin directory.
     */
-    if ( 'bai_hoc' === $post->post_type && locate_template( array( 'single-bai_hoc.php' ) ) !== $template ) {
+    if ( 'bai_hoc' === $post->post_type ) {
         return plugin_dir_path( __FILE__ ) . 'single-bai_hoc.php';
     }
 
-    if ( 'khoa_hoc' === $post->post_type && locate_template( array( 'single-khoa_hoc.php' ) ) !== $template ) {
+    if ( 'khoa_hoc' === $post->post_type ) {
         return plugin_dir_path( __FILE__ ) . 'single-khoa_hoc.php';
     }
 
     return $single;
 
+}
+
+/* Filter the author page template with our function */
+add_filter( 'template_include', 'wpa_155871_template_author' );
+
+function wpa_155871_template_author( $template ) {
+
+    $file = '';
+
+    if ( is_author() ) {
+        $file   = 'author.php'; // the name of your custom template
+        $find[] = $file;
+        $find[] = 'learn_marketing/' . $file; // name of folder it could be in, in user's theme
+    } 
+
+    if ( $file ) {
+        $template       = locate_template( array_unique( $find ) );
+        if ( ! $template ) { 
+            // if not found in theme, will use your plugin version
+            $template = untrailingslashit( plugin_dir_path( __FILE__ ) ) . '/' . $file;
+        }
+    }
+
+    return $template;
 }
 
 add_action( 'wp_enqueue_scripts', 'learn_mkt_init' );

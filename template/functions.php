@@ -52,7 +52,184 @@ function active_account() {
     echo '</div>';
 }
 
-/* add_shortcode( "register_account", "register_account" );
+add_shortcode( "register_account", "register_account" );
 function register_account() {
+    if (isset($_GET['register'])) {
+        $data_user = explode("|", base64_decode($_GET['register']));
+        $check_user = $data_user[0];
+    }
 
-} */
+    if (
+        isset($_POST['post_nonce_field']) &&
+        wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')
+    ) {
+        $user_login     = strip_tags($_POST['username']);
+        $display_name   = strip_tags($_POST['display_name']);
+        $user_email     = $data_user[1];
+        $password       = strip_tags($_POST['password']);
+        $confirm_password   = strip_tags($_POST['confirm_password']);
+        $error = false;
+        $active = false;
+
+        if (($password != $confirm_password) || ($password=="")) {
+            $error = true;
+            $thongbao = "Mật khẩu không trùng khớp hoặc không hợp lệ.";
+        }
+
+        if (!$user_login) {
+            $error = true;
+            $thongbao = "Tên đăng nhập không được bỏ trống.";
+        } else {
+            if (username_exists($user_login)){
+                $error = true;
+                $thongbao = "Tên đăng nhập đã tồn tại, hãy chọn lại tên đăng nhập mới.";
+            }
+        }
+
+        if (!$user_email) {
+            $error = true;
+            $thongbao = "Email không được bỏ trống.";
+        } else {
+            if (email_exists($user_email)){
+                $error = true;
+                $thongbao = "Email đã tồn tại, hãy chọn lại email mới.";
+            }
+        }
+
+        if (isset($_POST['active']) && ($_POST['active'] == '1')) {
+            $active = true;
+        }
+
+        if (!$error) {
+            $args = array(
+                'user_login'    => $user_login,
+                'user_email'    => $user_email,
+                'user_pass'     => $password,
+                'display_name'  => $display_name,
+            );
+            $new_partner = wp_insert_user($args);
+
+            if ($active) {
+                update_field('field_6210b12e101b3', true, 'user_' . $new_partner );
+
+                #add to group
+                if ($check_user) {
+                    add_to_group($new_partner, $check_user);
+                }
+            }
+
+            # redirect to thank you page
+            wp_redirect('http://localhost/getproduct/thank-you/');
+            exit;
+        } else {
+            echo "<p class='warning'><i class='fa-solid fa-circle-exclamation'></i> " . $thongbao . "</p>";
+        }
+    }
+    ?>
+    <form action="#" method="POST" class="register_account">
+        <p>Email <span class="red">*</span></p>
+        <?php 
+            if(isset($data_user[1])){
+                echo '<input class="disable" type="email" disabled value="' . $data_user[1] . '">';
+                echo '<input type="hidden" name="active" value="1">';
+            } else {
+                echo '<input type="email" name="user_email" id="">';
+            }
+        ?>
+        
+        <p>Họ và tên</p>
+        <input type="text" name="display_name" id="">
+        <p>Tên đăng nhập <span class="red">*</span></p>
+        <input type="text" name="username" id="">
+        <p>Mật khẩu <span class="red">*</span></p>
+        <input type="password" name="password" id="">
+        <p>Xác nhận mật khẩu <span class="red">*</span></p>
+        <input type="password" name="confirm_password" id="">
+        <?php 
+        wp_nonce_field('post_nonce', 'post_nonce_field');
+        ?>
+        <input type="submit" class="button button-primary" value="Đăng ký">
+    </form>
+    <?php
+}
+
+
+function add_to_group($user_id, $leader_id) {
+    if ($user_id == $leader_id) {
+        return false;
+    }
+
+    $own_member = get_field('own_member','user_' . $leader_id);
+    if (!user_in_list($user_id, $own_member, 'member') || !$own_member) {
+        # add user to group
+        $data = array(
+            'member' => $user_id
+        );
+
+        if ($own_member) {
+            array_push($own_member, $data);
+            update_field('field_622094e83f62c', $own_member, 'user_' . $leader_id);
+        } else add_row('field_622094e83f62c', $data, 'user_' . $leader_id);
+        
+        $own_member = get_field('own_member','user_' . $leader_id);
+    } else {
+        return false;
+    }
+
+    # add leader to user account
+    $groups = get_field('groups','user_' . $user_id);
+    if (!user_in_list($leader_id, $groups, 'group_leader') || !$groups) {
+        $data = array(
+            'group_leader' => $leader_id
+        );
+        if ($groups) {
+            array_push($groups, $data);
+            update_field('field_6210f79ee5b05', $groups, 'user_' . $user_id);
+        } else add_row('field_6210f79ee5b05', $data, 'user_' . $user_id);
+    } else {
+        return false;
+    }
+
+    return true;
+}
+
+function del_to_group($user_id, $leader_id) {
+    $success = false;
+    # delete member from leader id
+    if( have_rows('own_member', 'user_' . $leader_id) ):
+        while( have_rows('own_member', 'user_' . $leader_id) ) : the_row();
+            $member = get_sub_field('member');
+    
+            if($member == $user_id) {
+                $row = get_row_index();
+                delete_row('field_622094e83f62c', $row, 'user_' . $leader_id);
+                $success = true;
+            }
+        endwhile;
+    endif;
+
+    # delete leader id from user id
+    if( have_rows('groups', 'user_' . $user_id) ):
+        while( have_rows('groups', 'user_' . $user_id) ) : the_row();
+            $group_leader = get_sub_field('group_leader');
+    
+            if($group_leader == $leader_id) {
+                $row = get_row_index();
+                delete_row('field_6210f79ee5b05', $row, 'user_' . $user_id);
+            }
+        endwhile;
+    endif;
+
+    return $success;
+}
+
+function user_in_list($user_id, $user_arr, $field_name) {
+    if (is_array($user_arr)) {
+        foreach ($user_arr as $user) {
+            if ($user_id == $user[$field_name]) {
+                return true;
+            }
+        }
+    }
+    return false;
+}

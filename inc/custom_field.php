@@ -623,7 +623,7 @@ if( function_exists('acf_add_local_field_group') ):
 						'role' => '',
 						'allow_null' => 0,
 						'multiple' => 0,
-						'return_format' => 'array',
+						'return_format' => 'id',
 					),
 				),
 			),

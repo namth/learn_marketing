@@ -66,7 +66,7 @@
     margin: 0 !important;
     position: relative;
 }
-.lessons_list li a{
+.lessons_list li a:first-child{
     display: block;
     padding: 8px 20px;
 }
@@ -80,7 +80,7 @@
     right: 20px;
     font-size: 28px;
     color: #3abf0a;
-    bottom: 5px;
+    bottom: 0px;
 }
 .lessons_list.active li:not(.lesson_lock):hover, .current_lesson{
     background: #f2ffcd;
@@ -116,6 +116,7 @@
     margin: 0;
 }
 .course_list li{
+    position: relative;
     list-style: none;
     border-radius: 10px;
     border: 1px solid #444;
@@ -130,6 +131,22 @@
 .course_list li:hover a{
     background: #f2ffcd;
     border-radius: 10px;
+}
+.course_list .check_done{
+    position: absolute;
+    right: 20px;
+    font-size: 24px;
+    bottom: 1px;
+}
+.green {
+    color: #3abf0a;
+}
+.red {
+    color: rgb(216, 0, 0);
+}
+.course_list .percent{
+    font-size: 18px;
+    bottom: 7px;
 }
 .pagination{
     text-align: center;
@@ -178,4 +195,34 @@ button.closed_button{
     display: block;
     text-align: center;
     margin: 0 auto;
+}
+.register_account .disable{
+    background: lightgray;
+    color: gray;
+}
+.register_account input[type="text"], .register_account input[type="email"], .register_account input[type="submit"]{
+    display: block;
+    border-radius: 8px;
+}
+.back_button{
+    display: block;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+a.delete_user{
+    position: absolute;
+    display: none;
+    right: 8px;
+    top: 6px;
+    background: #ec2100;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+.lessons_list li:hover a.delete_user{
+    display: block;
+    color: white;
+}
+a.delete_user svg{
+    padding: 0;
 }

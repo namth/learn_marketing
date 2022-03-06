@@ -44,7 +44,7 @@ do_action( 'flatsome_before_page' );
 <div class="row row-main">
     <div class="large-12 col">
         <div class="col-inner">
-
+            <a href="javascript:history.go(-1)" class="back_button"><i class="fa-solid fa-arrow-left"></i></a>
 <article>
     <header class="entry-header alignwide">
         <h1><?php the_title(); ?></h1>
