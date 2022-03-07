@@ -9,25 +9,31 @@ function list_khoahoc() {
     $groups = get_field('groups','user_' . $current_user->ID);
 
     $courses = array();
-    foreach ($groups as $group) {
-        $user_id = $group['group_leader'];
-        $group_courses = get_field('own_courses','user_' . $user_id);
-        $courses = array_merge($courses, $group_courses);
+    if($groups){
+        foreach ($groups as $group) {
+            $user_id = $group['group_leader'];
+            $group_courses = get_field('own_courses','user_' . $user_id);
+            $courses = array_merge($courses, $group_courses);
+        }
     }
 
-    $courses = array_unique(array_merge($courses, $own_courses));
+    if (is_array($own_courses)) {
+        $courses = array_unique(array_merge($courses, $own_courses));
+    }
 
     $icon_first = '<i class="fa-solid fa-book-journal-whills"></i>';
-    echo "<h2>Các khoá học dành riêng cho bạn</h2>";
-    echo "<ul class='course_list'>";
-
-    foreach ($own_courses as $course) {
-        $course_id = $course['own_course'];
-        echo "<li>";
-        echo '<b><a href="' . get_the_permalink($course_id) . '">' . $icon_first . get_the_title($course_id) . '</a></b>';
-        echo "</li>";
+    if ($own_courses) {
+        echo "<h2>Các khoá học dành riêng cho bạn</h2>";
+        echo "<ul class='course_list'>";
+    
+        foreach ($own_courses as $course) {
+            $course_id = $course['own_course'];
+            echo "<li>";
+            echo '<b><a href="' . get_the_permalink($course_id) . '">' . $icon_first . get_the_title($course_id) . '</a></b>';
+            echo "</li>";
+        }
+        echo "</ul>";
     }
-    echo "</ul>";
 
     # danh sách khoá học public
     echo "<br>";

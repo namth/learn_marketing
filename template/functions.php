@@ -54,103 +54,107 @@ function active_account() {
 
 add_shortcode( "register_account", "register_account" );
 function register_account() {
-    if (isset($_GET['register'])) {
-        $data_user = explode("|", base64_decode($_GET['register']));
-        $check_user = $data_user[0];
-    }
-
-    if (
-        isset($_POST['post_nonce_field']) &&
-        wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')
-    ) {
-        $user_login     = strip_tags($_POST['username']);
-        $display_name   = strip_tags($_POST['display_name']);
-        $user_email     = $data_user[1];
-        $password       = strip_tags($_POST['password']);
-        $confirm_password   = strip_tags($_POST['confirm_password']);
-        $error = false;
-        $active = false;
-
-        if (($password != $confirm_password) || ($password=="")) {
-            $error = true;
-            $thongbao = "Mật khẩu không trùng khớp hoặc không hợp lệ.";
+    if (!is_user_logged_in()) {
+        if (isset($_GET['register'])) {
+            $data_user = explode("|", base64_decode($_GET['register']));
+            $check_user = $data_user[0];
         }
 
-        if (!$user_login) {
-            $error = true;
-            $thongbao = "Tên đăng nhập không được bỏ trống.";
-        } else {
-            if (username_exists($user_login)){
+        if (
+            isset($_POST['post_nonce_field']) &&
+            wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')
+        ) {
+            $user_login     = strip_tags($_POST['username']);
+            $display_name   = strip_tags($_POST['display_name']);
+            $user_email     = $data_user[1];
+            $password       = strip_tags($_POST['password']);
+            $confirm_password   = strip_tags($_POST['confirm_password']);
+            $error = false;
+            $active = false;
+
+            if (($password != $confirm_password) || ($password=="")) {
                 $error = true;
-                $thongbao = "Tên đăng nhập đã tồn tại, hãy chọn lại tên đăng nhập mới.";
+                $thongbao = "Mật khẩu không trùng khớp hoặc không hợp lệ.";
             }
-        }
 
-        if (!$user_email) {
-            $error = true;
-            $thongbao = "Email không được bỏ trống.";
-        } else {
-            if (email_exists($user_email)){
+            if (!$user_login) {
                 $error = true;
-                $thongbao = "Email đã tồn tại, hãy chọn lại email mới.";
-            }
-        }
-
-        if (isset($_POST['active']) && ($_POST['active'] == '1')) {
-            $active = true;
-        }
-
-        if (!$error) {
-            $args = array(
-                'user_login'    => $user_login,
-                'user_email'    => $user_email,
-                'user_pass'     => $password,
-                'display_name'  => $display_name,
-            );
-            $new_partner = wp_insert_user($args);
-
-            if ($active) {
-                update_field('field_6210b12e101b3', true, 'user_' . $new_partner );
-
-                #add to group
-                if ($check_user) {
-                    add_to_group($new_partner, $check_user);
+                $thongbao = "Tên đăng nhập không được bỏ trống.";
+            } else {
+                if (username_exists($user_login)){
+                    $error = true;
+                    $thongbao = "Tên đăng nhập đã tồn tại, hãy chọn lại tên đăng nhập mới.";
                 }
             }
 
-            # redirect to thank you page
-            wp_redirect('http://localhost/getproduct/thank-you/');
-            exit;
-        } else {
-            echo "<p class='warning'><i class='fa-solid fa-circle-exclamation'></i> " . $thongbao . "</p>";
-        }
-    }
-    ?>
-    <form action="#" method="POST" class="register_account">
-        <p>Email <span class="red">*</span></p>
-        <?php 
-            if(isset($data_user[1])){
-                echo '<input class="disable" type="email" disabled value="' . $data_user[1] . '">';
-                echo '<input type="hidden" name="active" value="1">';
+            if (!$user_email) {
+                $error = true;
+                $thongbao = "Email không được bỏ trống.";
             } else {
-                echo '<input type="email" name="user_email" id="">';
+                if (email_exists($user_email)){
+                    $error = true;
+                    $thongbao = "Email đã tồn tại, hãy chọn lại email mới.";
+                }
             }
+
+            if (isset($_POST['active']) && ($_POST['active'] == '1')) {
+                $active = true;
+            }
+
+            if (!$error) {
+                $args = array(
+                    'user_login'    => $user_login,
+                    'user_email'    => $user_email,
+                    'user_pass'     => $password,
+                    'display_name'  => $display_name,
+                );
+                $new_partner = wp_insert_user($args);
+
+                if ($active) {
+                    update_field('field_6210b12e101b3', true, 'user_' . $new_partner );
+
+                    #add to group
+                    if ($check_user) {
+                        add_to_group($new_partner, $check_user);
+                    }
+                }
+
+                # redirect to thank you page
+                wp_redirect('http://localhost/getproduct/thank-you/');
+                exit;
+            } else {
+                echo "<p class='warning'><i class='fa-solid fa-circle-exclamation'></i> " . $thongbao . "</p>";
+            }
+        }
         ?>
-        
-        <p>Họ và tên</p>
-        <input type="text" name="display_name" id="">
-        <p>Tên đăng nhập <span class="red">*</span></p>
-        <input type="text" name="username" id="">
-        <p>Mật khẩu <span class="red">*</span></p>
-        <input type="password" name="password" id="">
-        <p>Xác nhận mật khẩu <span class="red">*</span></p>
-        <input type="password" name="confirm_password" id="">
-        <?php 
-        wp_nonce_field('post_nonce', 'post_nonce_field');
-        ?>
-        <input type="submit" class="button button-primary" value="Đăng ký">
-    </form>
-    <?php
+        <form action="#" method="POST" class="register_account">
+            <p>Email <span class="red">*</span></p>
+            <?php 
+                if(isset($data_user[1])){
+                    echo '<input class="disable" type="email" disabled value="' . $data_user[1] . '">';
+                    echo '<input type="hidden" name="active" value="1">';
+                } else {
+                    echo '<input type="email" name="user_email" id="">';
+                }
+            ?>
+            
+            <p>Họ và tên</p>
+            <input type="text" name="display_name" id="">
+            <p>Tên đăng nhập <span class="red">*</span></p>
+            <input type="text" name="username" id="">
+            <p>Mật khẩu <span class="red">*</span></p>
+            <input type="password" name="password" id="">
+            <p>Xác nhận mật khẩu <span class="red">*</span></p>
+            <input type="password" name="confirm_password" id="">
+            <?php 
+            wp_nonce_field('post_nonce', 'post_nonce_field');
+            ?>
+            <input type="submit" class="button button-primary" value="Đăng ký">
+        </form>
+        <?php
+    } else {
+        echo "Bạn đang đăng nhập.";
+    }
 }
 
 
@@ -232,4 +236,67 @@ function user_in_list($user_id, $user_arr, $field_name) {
         }
     }
     return false;
+}
+
+add_shortcode( "my_account", "my_account" );
+function my_account() {
+    $this_user = wp_get_current_user();
+    $link_avatar = get_avatar_url($this_user->ID);
+    $business_account = get_field('business_account','user_' . $this_user->ID);
+    ?>
+        <a href="javascript:history.go(-1)" class="back_button"><i class="fa-solid fa-arrow-left"></i></a>
+        <div class="user_info">
+            <img src="<?php echo $link_avatar; ?>" alt="">
+            <b class="user_displayname"><?php echo $this_user->display_name; ?></b>
+            <span class="username"><?php echo $this_user->user_login; ?></span>
+            <span class="user_email">(<?php echo $this_user->user_email; ?>)</span>
+            <ul class="list_function">
+                <?php
+                $user_slug = '/danh-sach-thanh-vien-cong-ty/';
+                $course_slug = '/danh-sach-khoa-hoc-cua-cong-ty/';
+                $edit_user_slug = '/account/';
+
+                if ($business_account) {
+                    echo '<li><a href="' . get_bloginfo('url') . $course_slug . '"><i class="fa-solid fa-book-journal-whills"></i></a></li>';
+                    echo '<li><a href="' . get_bloginfo('url') . $user_slug . '"><i class="fa-solid fa-users"></i></a></li>';
+                }
+                echo '<li><a href="' . get_bloginfo('url') . $edit_user_slug . '"><i class="fa-solid fa-user-pen"></i></a></li>';
+                echo '<li><a href="' . wp_logout_url() . '"><i class="fa-solid fa-right-from-bracket"></i></a></li>';
+                ?>
+            </ul>
+        </div>
+        <div class="courses_list">
+            <h2>Danh sách khoá học</h2>
+            <?php 
+            $list_courses = get_field('list_courses','user_' . $this_user->ID);
+            $icon_first = '<i class="fa-solid fa-book-journal-whills"></i>';
+            
+            if ($list_courses) {
+                echo "<ul class='course_list'>";
+                foreach ($list_courses as $course) {
+                    $course_id = $course['course'];
+                    $number_lesson = $course['lessons'];
+                    $lesson = get_field('lessons', $course_id);
+                    
+                    $percent_finish_course = number_format(($number_lesson - 1) / count($lesson) * 100);
+                    if ($percent_finish_course >= 100) {
+                        $icon_last = '<i class="fa-solid fa-check"></i>';
+                        $class = 'check_done green';
+                    } else {
+                        $icon_last = $percent_finish_course . '%';
+                        $class = 'check_done percent';
+                    }
+                    
+                    echo "<li>";
+                    echo '<b><a href="' . get_the_permalink($course_id) . '">' . $icon_first . get_the_title($course_id) . '</a></b>';
+                    echo '<span class="' . $class . '">' . $icon_last . '</span>';
+                    echo "</li>";
+                }
+                echo "</ul>";
+            } else {
+                echo "Bạn chưa bắt đầu học khoá học nào, hãy chọn một khoá học để bắt đầu.";
+            }
+            ?>
+        </div>
+    <?php
 }
