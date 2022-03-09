@@ -116,7 +116,6 @@ if( function_exists('acf_add_local_field_group') ):
 					'Câu hỏi ngắn' => 'Câu hỏi ngắn',
 					'Câu hỏi dài' => 'Câu hỏi dài',
 					'Câu hỏi lựa chọn' => 'Câu hỏi lựa chọn',
-					'Video' => 'Video',
 					'Trắc nghiệm' => 'Trắc nghiệm',
 				),
 				'default_value' => array(
