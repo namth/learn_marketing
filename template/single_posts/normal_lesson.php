@@ -41,11 +41,11 @@
     
         foreach ($questions as $question) {
             $qid = $question['question']->ID;
-            $content = $question['question']->post_content;
+            $content = wpautop($question['question']->post_content);
             $question_type = get_field('question_type', $qid);
             $name_question = 'question_' . $qid;
     
-            $data .= '<h4>' . $content . '</h4>';
+            $data .= $content;
     
             if (isset($_POST[$name_question])) {
                 if (is_array($_POST[$name_question])) {
@@ -100,7 +100,7 @@
     do_action( 'flatsome_before_page' ); 
     
 ?>
-<div id="content" class="content-area page-wrapper" role="main">
+<div id="content" class="content-area page-wrapper normal_lesson" role="main">
     <div class="row row-main">
         <div class="large-12 col">
             <div class="col-inner">
@@ -124,7 +124,7 @@
                     $name_question = 'question_' . $qid;
 
                     echo "<div class='question'>";
-                    echo '<h4>' . $content . '</h4>';
+                    echo apply_filters('the_content', $content);
                     
                     if (isset($_POST[$name_question])) {
                         if (is_array($_POST[$name_question])) {

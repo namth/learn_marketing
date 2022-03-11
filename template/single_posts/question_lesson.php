@@ -64,7 +64,7 @@ do_action( 'flatsome_before_page' );
                 $name_question = 'question_' . $qid;
 
                 echo "<div class='question'>";
-                echo '<h4>' . $content . '</h4>';
+                echo apply_filters('the_content', $content);
                 
                 if (isset($_POST[$name_question])) {
                     if (is_array($_POST[$name_question])) {
@@ -96,7 +96,7 @@ do_action( 'flatsome_before_page' );
             echo '</form>';
         } else {
         ?>
-            <p>Bạn đạt được <span><?php echo $mark; ?></span> điểm</p>
+            <h4>Chúc mừng bạn đã hoàn thành bài kiểm tra. Bạn đạt được: <span class='mark'><?php echo $mark; ?> điểm</span></h4>
             <a href="<?php echo get_permalink($data_code[0]); ?>" class="button">Quay lại</a>
         <?php
         }
