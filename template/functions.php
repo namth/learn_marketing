@@ -120,7 +120,7 @@ function register_account() {
                 }
 
                 # redirect to thank you page
-                wp_redirect('http://localhost/getproduct/thank-you/');
+                wp_redirect( get_bloginfo('url') . '/thank-you/');
                 exit;
             } else {
                 echo "<p class='warning'><i class='fa-solid fa-circle-exclamation'></i> " . $thongbao . "</p>";

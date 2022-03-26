@@ -38,9 +38,15 @@ $link_avatar = get_avatar_url($this_user->ID);
                                 $icon_last = $percent_finish_course . '%';
                                 $class = 'check_done percent';
                             }
+
+                            if ($current_user->ID == $this_user->ID) {
+                                $link = get_the_permalink($course_id);
+                            } else {
+                                $link = '#';
+                            }
                             
                             echo "<li>";
-                            echo '<b><a href="' . get_the_permalink($course_id) . '">' . $icon_first . get_the_title($course_id) . '</a></b>';
+                            echo '<b><a href="' . $link . '">' . $icon_first . get_the_title($course_id) . '</a></b>';
                             echo '<span class="' . $class . '">' . $icon_last . '</span>';
                             echo "</li>";
                         }

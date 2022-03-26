@@ -1,18 +1,32 @@
 <?php 
-
 if ( isset($_POST['post_nonce_field']) &&
 wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce') ) {
 
+    $report = array();
     $good_question = 0;
     $total_question = count($questions);
     foreach ($questions as $question) {
         $qid = $question['question']->ID;
         $name_question = 'question_' . $qid;
-        $answer = trim(get_field('answer', $qid));
-        $answer_arr = explode(PHP_EOL, $answer);
+        $answer = get_field('answer', $qid);
+        $answer_arr = array_filter(array_map('trim', explode(PHP_EOL, $answer)));
+        $your_answers = array_map('trim', $_POST[$name_question]);
 
-        if ($_POST[$name_question] == $answer_arr) {
+        /* if ($your_answer == $answer_arr) {
             $good_question++;
+        } */
+        $not_ok = false;
+        foreach ($answer_arr as $_answer) {
+            if (!in_array(trim($_answer), $your_answers)) {
+                $not_ok = true;
+                $report['wrong'][$qid] = $_answer;
+            }
+        }
+
+        if (!$not_ok) {
+            $good_question++;
+        } else {
+            $report['text'] .= 'Wrong answer for question number: ' . $qid . '<br>';
         }
     }
     $mark = round($good_question/$total_question*100);

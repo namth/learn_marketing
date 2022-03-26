@@ -1,7 +1,9 @@
 <?php
-if ($_GET['course'] != "") {
+if (isset($_GET['course']) && ($_GET['course'] != "")) {
     $url_code = base64_decode($_GET['course']); # data struct ("course_id|lesson")
     $data_code = explode('|',$url_code);
+} else {
+    $data_code = array(NULL, NULL);
 }
 
 while (have_posts()) {

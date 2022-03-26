@@ -24,21 +24,31 @@ function list_khoahoc() {
     $icon_first = '<i class="fa-solid fa-book-journal-whills"></i>';
     if ($own_courses) {
         echo "<h2>Các khoá học dành riêng cho bạn</h2>";
-        echo "<ul class='course_list'>";
+        echo "<div class='row large-columns-4'>";
     
         foreach ($own_courses as $course) {
             $course_id = $course['own_course'];
-            echo "<li>";
-            echo '<b><a href="' . get_the_permalink($course_id) . '">' . $icon_first . get_the_title($course_id) . '</a></b>';
-            echo "</li>";
+            echo "<div class='col post-item'>
+                    <div class='box box-normal box-text-bottom'>
+                        <div class='box-image'>
+                            <div class='image-cover' style='padding-top:56.25%;'>
+            ";
+            echo get_the_post_thumbnail();
+            echo "          </div>
+                        </div>
+                    </div>
+                    <div class='box-text'>";
+            echo '      <b><a href="' . get_the_permalink($course_id) . '">' . get_the_title($course_id) . '</a></b>';
+            echo "  </div>
+                </div>";
         }
-        echo "</ul>";
+        echo "</div>";
     }
 
     # danh sách khoá học public
     echo "<br>";
     echo "<h2>Danh sách khoá học</h2>";
-    echo "<ul class='course_list'>";
+    echo "<div class='row large-columns-4'>";
 
     $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
 
@@ -63,12 +73,22 @@ function list_khoahoc() {
             $query->the_post();
 
             $course_id = get_the_ID();
-            echo "<li>";
-            echo '<b><a href="' . get_the_permalink($course_id) . '">' . $icon_first . get_the_title($course_id) . '</a></b>';
-            echo "</li>";
+            echo "<div class='col post-item'>
+                    <div class='box box-normal box-text-bottom'>
+                        <div class='box-image'>
+                            <div class='image-cover' style='padding-top:56.25%;'>
+            ";
+            echo get_the_post_thumbnail();
+            echo "          </div>
+                        </div>
+                    </div>
+                    <div class='box-text'>";
+            echo '      <b><a href="' . get_the_permalink($course_id) . '">' . get_the_title($course_id) . '</a></b>';
+            echo "  </div>
+                </div>";
         }
     }
-    echo "</ul>";
+    echo "</div>";
     echo '<div class="pagination justify-content-center">';
     
     $big = 999999999; // need an unlikely integer
