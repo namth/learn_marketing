@@ -4,30 +4,13 @@ add_shortcode( "list_khoahoc", "list_khoahoc" );
 function list_khoahoc() {
     # danh sách khoá học private
     $current_user = wp_get_current_user();
-    $active = get_field('active','user_' . $current_user->ID);
-    $own_courses = get_field('own_courses','user_' . $current_user->ID);
-    $groups = get_field('groups','user_' . $current_user->ID);
+    $courses = get_user_course($current_user->ID);
 
-    $courses = array();
-    if($groups){
-        foreach ($groups as $group) {
-            $user_id = $group['group_leader'];
-            $group_courses = get_field('own_courses','user_' . $user_id);
-            $courses = array_merge($courses, $group_courses);
-        }
-    }
-
-    if (is_array($own_courses)) {
-        $courses = array_unique(array_merge($courses, $own_courses));
-    }
-
-    $icon_first = '<i class="fa-solid fa-book-journal-whills"></i>';
-    if ($own_courses) {
+    if ($courses) {
         echo "<h2>Các khoá học dành riêng cho bạn</h2>";
         echo "<div class='row large-columns-4'>";
     
-        foreach ($own_courses as $course) {
-            $course_id = $course['own_course'];
+        foreach ($courses as $course_id) {
             echo "<div class='col post-item'>
                     <div class='box box-normal box-text-bottom'>
                         <div class='box-image'>

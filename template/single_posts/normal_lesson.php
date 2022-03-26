@@ -104,7 +104,13 @@
     <div class="row row-main">
         <div class="large-12 col">
             <div class="col-inner">
-                <a href="javascript:history.go(-1)" class="back_button"><i class="fa-solid fa-arrow-left"></i></a>
+            <?php 
+                if ($data_code[0]) {
+                    echo '<a href="'. get_permalink($data_code[0]) .'" class="back_button"><i class="fa-solid fa-arrow-left"></i></a>';
+                } else {
+                    echo '<a href="javascript:history.go(-1)" class="back_button"><i class="fa-solid fa-arrow-left"></i></a>';
+                }
+            ?>
     <article>
         <header class="entry-header alignwide">
             <h1><?php the_title(); ?></h1>

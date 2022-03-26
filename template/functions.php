@@ -300,3 +300,29 @@ function my_account() {
         </div>
     <?php
 }
+
+function get_user_course($userID){
+    $own_courses = get_field('own_courses','user_' . $userID);
+    $groups = get_field('groups','user_' . $userID);
+
+    $courses = array();
+    if($groups){
+        foreach ($groups as $group) {
+            $user_id = $group['group_leader'];
+            $group_courses = get_field('own_courses','user_' . $user_id);
+            $courses = array_merge($courses, $group_courses);
+        }
+    }
+
+    if (is_array($own_courses)) {
+        $courses = array_merge($courses, $own_courses);
+    }
+
+    $result = array();
+    foreach ($courses as $value) {
+        if (!in_array($value['own_course'], $result)) {
+            $result[] = $value['own_course'];
+        }
+    }
+    return $result;
+}

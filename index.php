@@ -38,6 +38,10 @@ function my_custom_template($single) {
         return plugin_dir_path( __FILE__ ) . 'single-khoa_hoc.php';
     }
 
+    if ( 'cau_hoi' === $post->post_type ) {
+        return plugin_dir_path( __FILE__ ) . 'single-cau_hoi.php';
+    }
+
     return $single;
 
 }

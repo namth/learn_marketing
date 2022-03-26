@@ -14,7 +14,7 @@ while (have_posts()) {
             $current_lesson = $course['lessons'];
         }
     }
-    $url_code = '?course=' . base64_encode($current_course_ID . '|' . $current_lesson);
+    $url_code = '?course=' . base64_encode($current_course_ID . '|' . $current_lesson . '|' . $current_user->ID);
 
     $lesson_title = get_the_title();
     $lessons = get_field('lessons');
@@ -23,12 +23,28 @@ while (have_posts()) {
     get_header();
     do_action( 'flatsome_before_page' ); 
 
+    $back_link = get_bloginfo('url') . '/user/';
 ?>
 <div id="content" class="content-area page-wrapper" role="main">
     <div class="row row-main">
         <div class="large-12 col">
             <div class="col-inner">
-                <a href="javascript:history.go(-1)" class="back_button"><i class="fa-solid fa-arrow-left"></i></a>
+                <!-- Check if course is private and current user is not login or haven't permission in this course -->
+                <?php 
+                if (is_user_logged_in()) {
+                    # check if course is private?
+                    if ($course_type == 'Private') {
+                        $permission = false;
+                        $user_courses = get_user_course($current_user->ID);
+                        if (in_array($current_course_ID, $user_courses)) {
+                            $permission = true;
+                        }
+                    } else {
+                        $permission = true;
+                    }
+                    if ($permission) {
+                ?>
+                <a href="<?php echo $back_link; ?>" class="back_button"><i class="fa-solid fa-arrow-left"></i></a>
                 <article>
                     <header class="entry-header alignwide">
                         <h1><?php the_title(); ?></h1>
@@ -91,8 +107,14 @@ while (have_posts()) {
                     ?>
                     </div>
                 </article>
-
-
+                <?php 
+                    } else {
+                        echo '<div class="entry-content" id="my-lesson">Bạn không có quyền truy cập tính năng này. Hãy kiểm tra lại.</div>';
+                    }
+                } else {
+                    echo '<div class="entry-content" id="my-lesson">Bạn chưa đăng nhập. Hãy đăng nhập để sử dụng tính năng này.</div>';
+                }
+                ?>
             </div>
         </div>
     </div>
