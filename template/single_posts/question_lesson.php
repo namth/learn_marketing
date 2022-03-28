@@ -50,6 +50,7 @@ wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce') ) {
 
         $thongbao = "<h3>Chúc mừng bạn đã đạt yêu cầu.</h3>";
         $color = 'limegreen';
+        $thongbao2 = '';
     } else {
         $thongbao = "<h3>Chỉ còn một xíu nữa là đạt yêu cầu.</h3>";
         $thongbao2 = "<h4>Hãy thử lại nhé!</h4>";
@@ -123,49 +124,7 @@ do_action( 'flatsome_before_page' );
 
                 <div class="entry-content" id="my-lesson">
                     <?php
-                    the_content();
-
-                    if (!$answered) {
-                        echo '<form action="#" method="POST">';
-
-                        foreach ($questions as $question) {
-                            $qid = $question['question']->ID;
-                            $content = $question['question']->post_content;
-                            $question_type = get_field('question_type', $qid);
-                            $name_question = 'question_' . $qid;
-
-                            echo "<div class='question'>";
-                            echo apply_filters('the_content', $content);
-                            
-                            if (isset($_POST[$name_question])) {
-                                if (is_array($_POST[$name_question])) {
-                                    $answer_content = implode("<br>", $_POST[$name_question]);
-                                } else $answer_content = $_POST[$name_question];
-
-                                echo "<div class='answer'>";
-                                echo wpautop($answer_content);
-                                echo "</div>";
-                            } else {
-                                echo "<div class='answer'>";
-                                $choices = get_field('choices', $qid);
-                                $list_answers = explode(PHP_EOL, trim($choices));
-
-                                echo '<ul class="list_answers">';
-                                foreach ($list_answers as $answer) {
-                                    echo '<li>';
-                                    echo '<input type="checkbox" name="' . $name_question . '[]" value="' . trim($answer) . '"> ' . trim($answer);
-                                    echo '</li>';
-                                }
-                                echo '</ul>';
-                                echo "</div>";
-                            }
-                            echo "</div>";
-                        }
-                        
-                        wp_nonce_field('post_nonce', 'post_nonce_field');
-                        echo '<input type="submit" class="button button-primary" value="Gửi kết quả">';
-                        echo '</form>';
-                    } else {
+                    if ($answered) {
                     ?>
                     <div style="text-align: center;">
                         <?php if($thongbao) echo $thongbao; ?>
@@ -175,6 +134,55 @@ do_action( 'flatsome_before_page' );
                     </div>
                     <?php
                     }
+                    the_content();
+
+                    echo '<form action="#" method="POST">';
+
+                    foreach ($questions as $question) {
+                        $qid = $question['question']->ID;
+                        $content = $question['question']->post_content;
+                        $question_type = get_field('question_type', $qid);
+                        $more_answer = get_field('more_answer', $qid);
+                        $name_question = 'question_' . $qid;
+
+                        echo "<div class='question'>";
+                        echo apply_filters('the_content', $content);
+                        
+                        if (isset($_POST[$name_question])) {
+                            if (is_array($_POST[$name_question])) {
+                                $answer_content = implode("<br>", $_POST[$name_question]);
+                            } else $answer_content = $_POST[$name_question];
+
+                            if ($answer_content){
+                                echo "<div class='answer'>";
+                                echo wpautop($answer_content);
+                                echo "</div>";
+                            }
+                            if ($more_answer){
+                                echo "<div class='more_answer'>";
+                                echo wpautop($more_answer);
+                                echo "</div>";
+                            }
+                        } else {
+                            echo "<div class='answer'>";
+                            $choices = get_field('choices', $qid);
+                            $list_answers = explode(PHP_EOL, trim($choices));
+
+                            echo '<ul class="list_answers">';
+                            foreach ($list_answers as $answer) {
+                                echo '<li>';
+                                echo '<input type="checkbox" name="' . $name_question . '[]" value="' . trim($answer) . '"> ' . trim($answer);
+                                echo '</li>';
+                            }
+                            echo '</ul>';
+                            echo "</div>";
+                        }
+                        echo "</div>";
+                    }
+                    
+                    wp_nonce_field('post_nonce', 'post_nonce_field');
+                    if (!$answered) echo '<input type="submit" class="button button-primary" value="Gửi kết quả">';
+                    echo '</form>';
                     ?>
                 </div>
             </article>

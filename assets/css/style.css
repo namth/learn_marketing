@@ -46,10 +46,17 @@
     padding: 10px;
     border-radius: 8px;
     /* border: 1px solid gray; */
-    margin-bottom: 20px;
+    margin-bottom: 8px;
 }
 .answer ul{
     list-style: none;
+}
+.more_answer{
+    background: #eaffbb;
+    padding: 5px 10px;
+    border-radius: 8px;
+    color: green;
+    margin-bottom: 20px;
 }
 .my_email{
     width: initial !important;

@@ -33,18 +33,19 @@
     if ( isset($_POST['post_nonce_field']) &&
         wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce') ) {
     
-        require_once __DIR__ . '/vendor/autoload.php';
+        require_once $dir . '/vendor/autoload.php';
     
         $mpdf = new \Mpdf\Mpdf();
     
         $data = '<h1>' . $lesson_title . '</h1>';
     
         foreach ($questions as $question) {
-            $qid = $question['question']->ID;
-            $content = wpautop($question['question']->post_content);
-            $question_type = get_field('question_type', $qid);
-            $name_question = 'question_' . $qid;
-    
+            $qid            = $question['question']->ID;
+            $content        = wpautop($question['question']->post_content);
+            $question_type  = get_field('question_type', $qid);
+            $more_answer    = get_field('more_answer', $qid);
+            $name_question  = 'question_' . $qid;
+            
             $data .= $content;
     
             if (isset($_POST[$name_question])) {
@@ -164,63 +165,69 @@
                         <?php
                         the_content();
 
-                        if (!$answered) {
-                            echo '<form action="#" method="POST">';
+                        echo '<form action="#" method="POST">';
 
-                            foreach ($questions as $question) {
-                                $qid = $question['question']->ID;
-                                $content = $question['question']->post_content;
-                                $question_type = get_field('question_type', $qid);
-                                $name_question = 'question_' . $qid;
+                        foreach ($questions as $question) {
+                            $qid = $question['question']->ID;
+                            $content = $question['question']->post_content;
+                            $question_type = get_field('question_type', $qid);
+                            $more_answer = get_field('more_answer', $qid);
+                            $name_question = 'question_' . $qid;
 
-                                echo "<div class='question'>";
-                                echo apply_filters('the_content', $content);
-                                
-                                if (isset($_POST[$name_question])) {
-                                    if (is_array($_POST[$name_question])) {
-                                        $answer_content = implode("<br>", $_POST[$name_question]);
-                                    } else $answer_content = $_POST[$name_question];
+                            echo "<div class='question'>";
+                            echo apply_filters('the_content', $content);
+                            
+                            if (isset($_POST[$name_question])) {
+                                if (is_array($_POST[$name_question])) {
+                                    $answer_content = implode("<br>", $_POST[$name_question]);
+                                } else $answer_content = $_POST[$name_question];
 
+                                if ($answer_content){
                                     echo "<div class='answer'>";
                                     echo wpautop($answer_content);
                                     echo "</div>";
-                                } else {
-                                    echo "<div class='answer'>";
-                                    switch ($question_type) {
-                                        case 'Câu hỏi ngắn':
-                                            echo '<input type="text" name="' . $name_question . '">';
-                                            break;
-                                    
-                                        case 'Câu hỏi lựa chọn':
-                                            $choices = get_field('choices', $qid);
-                                            $list_answers = explode(PHP_EOL, trim($choices));
-
-                                            echo '<ul>';
-                                            foreach ($list_answers as $answer) {
-                                                echo '<li>';
-                                                echo '<input type="checkbox" name="' . $name_question . '[]" value="' . trim($answer) . '"> ' . trim($answer);
-                                                echo '</li>';
-                                            }
-                                            echo '</ul>';
-                                            break;
-                                        
-                                        default:
-                                            // echo '<textarea name="' . $name_question . '" id="" cols="30" rows="10"></textarea>';
-                                            wp_editor('', $name_question, array('media_buttons'=>false)); 
-                                            break;
-                                    }
+                                }
+                                if ($more_answer){
+                                    echo "<div class='more_answer'>";
+                                    echo wpautop($more_answer);
                                     echo "</div>";
+                                }
+                            } else {
+                                echo "<div class='answer'>";
+                                switch ($question_type) {
+                                    case 'Câu hỏi ngắn':
+                                        echo '<input type="text" name="' . $name_question . '">';
+                                        break;
+                                
+                                    case 'Câu hỏi lựa chọn':
+                                        $choices = get_field('choices', $qid);
+                                        $list_answers = explode(PHP_EOL, trim($choices));
+
+                                        echo '<ul>';
+                                        foreach ($list_answers as $answer) {
+                                            echo '<li>';
+                                            echo '<input type="checkbox" name="' . $name_question . '[]" value="' . trim($answer) . '"> ' . trim($answer);
+                                            echo '</li>';
+                                        }
+                                        echo '</ul>';
+                                        break;
+                                    
+                                    default:
+                                        // echo '<textarea name="' . $name_question . '" id="" cols="30" rows="10"></textarea>';
+                                        wp_editor('', $name_question, array('media_buttons'=>false)); 
+                                        break;
                                 }
                                 echo "</div>";
                             }
-                            
-                            if (!$answered) {
-                                echo "<label>Nhập địa chỉ email của bạn</label>";
-                                echo '<input type="text" name="email" class="my_email">';
-                                wp_nonce_field('post_nonce', 'post_nonce_field');
-                                echo '<input type="submit" class="button button-primary" value="Gửi kết quả">';
-                                echo '</form>';
-                            }
+                            echo "</div>";
+                        }
+                        
+                        if (!$answered) {
+                            echo "<label>Nhập địa chỉ email của bạn</label>";
+                            echo '<input type="text" name="email" class="my_email">';
+                            wp_nonce_field('post_nonce', 'post_nonce_field');
+                            echo '<input type="submit" class="button button-primary" value="Nộp bài và gửi kết quả">';
+                            echo '</form>';
                         } else {
                         ?>
                             <p>Chúng tôi đã gửi email cho bạn, hãy kiểm tra email để download câu trả lời.</p>

@@ -205,21 +205,13 @@ if( function_exists('acf_add_local_field_group') ):
 				'new_lines' => '',
 			),
 			array(
-				'key' => 'field_62078b441e17f',
-				'label' => 'Link youtube',
-				'name' => 'link_youtube',
-				'type' => 'url',
-				'instructions' => '',
+				'key' => 'field_6241df998bb70',
+				'label' => 'Nội dung bổ sung',
+				'name' => 'more_answer',
+				'type' => 'textarea',
+				'instructions' => 'Nội dung sẽ được hiển thị thêm trong các câu trả lời khi người dùng nộp bài.',
 				'required' => 0,
-				'conditional_logic' => array(
-					array(
-						array(
-							'field' => 'field_61c71d7c14a87',
-							'operator' => '==',
-							'value' => 'Video',
-						),
-					),
-				),
+				'conditional_logic' => 0,
 				'wrapper' => array(
 					'width' => '',
 					'class' => '',
@@ -227,6 +219,9 @@ if( function_exists('acf_add_local_field_group') ):
 				),
 				'default_value' => '',
 				'placeholder' => '',
+				'maxlength' => '',
+				'rows' => '',
+				'new_lines' => '',
 			),
 		),
 		'location' => array(
@@ -248,6 +243,7 @@ if( function_exists('acf_add_local_field_group') ):
 		'description' => '',
 	));
 	
+		
 	acf_add_local_field_group(array(
 		'key' => 'group_62079f653a021',
 		'title' => 'Khoá học',
