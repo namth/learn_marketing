@@ -101,101 +101,143 @@
     
 ?>
 <div id="content" class="content-area page-wrapper normal_lesson" role="main">
-    <div class="row row-main">
-        <div class="large-12 col">
-            <div class="col-inner">
+    <div class="gallery row-main">
+        <div class="large-3 col">
+            <div class="col-inner page-wrapper">
             <?php 
-                if ($data_code[0]) {
-                    echo '<a href="'. get_permalink($data_code[0]) .'" class="back_button"><i class="fa-solid fa-arrow-left"></i></a>';
+                if ($current_course_id) {
+                    echo '<a href="'. get_permalink($current_course_id) .'" class="back_button"><i class="fa-solid fa-arrow-left"></i></a>';
                 } else {
                     echo '<a href="javascript:history.go(-1)" class="back_button"><i class="fa-solid fa-arrow-left"></i></a>';
                 }
-            ?>
-    <article>
-        <header class="entry-header alignwide">
-            <h1><?php the_title(); ?></h1>
-        </header>
 
-        <div class="entry-content" id="my-lesson">
-            <?php
-            the_content();
+                $lessons = get_field('lessons', $current_course_id);
 
-            if (!$answered) {
-                echo '<form action="#" method="POST">';
+                echo "<ul class='lessons_list active fixed_div'>";
+                $i = 0;
+                foreach ($lessons as $lesson) {
+                    $i++;
+                    // print_r($lesson);
+                    $lesson_id = $lesson['lesson']->ID;
+                    $lesson_title = $lesson['lesson']->post_title;
+                    $lesson_type = get_field('lesson_type', $lesson_id);
+                    $icon_first = ($lesson_type == "Bài trắc nghiệm")?'<i class="fa-solid fa-circle-question"></i>':'<i class="fa-solid fa-book"></i>';
 
-                foreach ($questions as $question) {
-                    $qid = $question['question']->ID;
-                    $content = $question['question']->post_content;
-                    $question_type = get_field('question_type', $qid);
-                    $name_question = 'question_' . $qid;
-
-                    echo "<div class='question'>";
-                    echo apply_filters('the_content', $content);
-                    
-                    if (isset($_POST[$name_question])) {
-                        if (is_array($_POST[$name_question])) {
-                            $answer_content = implode("<br>", $_POST[$name_question]);
-                        } else $answer_content = $_POST[$name_question];
-
-                        echo "<div class='answer'>";
-                        echo wpautop($answer_content);
-                        echo "</div>";
-                    } else {
-                        echo "<div class='answer'>";
-                        switch ($question_type) {
-                            case 'Câu hỏi ngắn':
-                                echo '<input type="text" name="' . $name_question . '">';
-                                break;
-                        
-                            case 'Câu hỏi lựa chọn':
-                                $choices = get_field('choices', $qid);
-                                $list_answers = explode(PHP_EOL, trim($choices));
-
-                                echo '<ul>';
-                                foreach ($list_answers as $answer) {
-                                    echo '<li>';
-                                    echo '<input type="checkbox" name="' . $name_question . '[]" value="' . trim($answer) . '"> ' . trim($answer);
-                                    echo '</li>';
-                                }
-                                echo '</ul>';
-                                break;
-                            
-                            default:
-                                // echo '<textarea name="' . $name_question . '" id="" cols="30" rows="10"></textarea>';
-                                wp_editor('', $name_question, array('media_buttons'=>false)); 
-                                break;
+                    if ($active) {
+                        $url_code = '?course=' . base64_encode($current_course_id . '|' . $current_lesson . '|' . $current_user->ID . '|' . $lesson_id );
+                        if ($current_lesson >= $i) {
+                            if ($current_lesson == $i) {
+                                $next_lesson = $lesson_id;
+                                $icon_last = '';
+                                echo "<li class='current_lesson'>";
+                            } else{
+                                $icon_last = '<i class="fa-solid fa-check"></i>';
+                                echo "<li>";
+                            }
+                            echo '<b><a href="' . get_the_permalink($lesson_id) . $url_code . '">' . $icon_first . '</i>' . $lesson_title . '</a></b><span class="check_done">' . $icon_last . '</span>';
+                        } else{
+                            echo "<li class='lesson_lock'>";
+                            echo '<b>' . $icon_first . '</i>' . $lesson_title . '</b><span class="locked"><i class="fa-solid fa-lock"></i></span>';
                         }
-                        echo "</div>";
+                    } else {
+                        echo '<b>' . $icon_first . '</i>' . $lesson_title . '</b><span class="locked"><i class="fa-solid fa-lock"></i></span>';
                     }
-                    echo "</div>";
+                    
+                    echo "</li>";
                 }
-                
-                if (!$answered) {
-                    echo "<label>Nhập địa chỉ email của bạn</label>";
-                    echo '<input type="text" name="email" class="my_email">';
-                    wp_nonce_field('post_nonce', 'post_nonce_field');
-                    echo '<input type="submit" class="button button-primary" value="Gửi kết quả">';
-                    echo '</form>';
-                }
-            } else {
-            ?>
-                <p>Chúng tôi đã gửi email cho bạn, hãy kiểm tra email để download câu trả lời.</p>
-                <a href="javascript:history.go(-1)" class="button">Quay lại</a>
-            <?php
-            }
-            ?>
-        </div>
-        <div class="align_right">
-            <form action="" method="post">
-                <?php 
-                    wp_nonce_field('wp_post_nonce', 'wp_post_nonce_field');
+                echo "</ul>";
                 ?>
-                <input type="submit" value="Hoàn tất bài học">
-            </form>
+            </div>
         </div>
-    </article>
+        <div class="large-9 col main_scroll">
+            <div class="col-inner">
+            <?php 
+                $link_youtube = get_field('youtube');
+                if ($link_youtube) echo apply_filters('the_content', $link_youtube);
+            ?>
+                <article>
+                    <header class="entry-header alignwide">
+                        <h1><?php the_title(); ?></h1>
+                    </header>
 
+                    <div class="entry-content" id="my-lesson">
+                        <?php
+                        the_content();
 
+                        if (!$answered) {
+                            echo '<form action="#" method="POST">';
+
+                            foreach ($questions as $question) {
+                                $qid = $question['question']->ID;
+                                $content = $question['question']->post_content;
+                                $question_type = get_field('question_type', $qid);
+                                $name_question = 'question_' . $qid;
+
+                                echo "<div class='question'>";
+                                echo apply_filters('the_content', $content);
+                                
+                                if (isset($_POST[$name_question])) {
+                                    if (is_array($_POST[$name_question])) {
+                                        $answer_content = implode("<br>", $_POST[$name_question]);
+                                    } else $answer_content = $_POST[$name_question];
+
+                                    echo "<div class='answer'>";
+                                    echo wpautop($answer_content);
+                                    echo "</div>";
+                                } else {
+                                    echo "<div class='answer'>";
+                                    switch ($question_type) {
+                                        case 'Câu hỏi ngắn':
+                                            echo '<input type="text" name="' . $name_question . '">';
+                                            break;
+                                    
+                                        case 'Câu hỏi lựa chọn':
+                                            $choices = get_field('choices', $qid);
+                                            $list_answers = explode(PHP_EOL, trim($choices));
+
+                                            echo '<ul>';
+                                            foreach ($list_answers as $answer) {
+                                                echo '<li>';
+                                                echo '<input type="checkbox" name="' . $name_question . '[]" value="' . trim($answer) . '"> ' . trim($answer);
+                                                echo '</li>';
+                                            }
+                                            echo '</ul>';
+                                            break;
+                                        
+                                        default:
+                                            // echo '<textarea name="' . $name_question . '" id="" cols="30" rows="10"></textarea>';
+                                            wp_editor('', $name_question, array('media_buttons'=>false)); 
+                                            break;
+                                    }
+                                    echo "</div>";
+                                }
+                                echo "</div>";
+                            }
+                            
+                            if (!$answered) {
+                                echo "<label>Nhập địa chỉ email của bạn</label>";
+                                echo '<input type="text" name="email" class="my_email">';
+                                wp_nonce_field('post_nonce', 'post_nonce_field');
+                                echo '<input type="submit" class="button button-primary" value="Gửi kết quả">';
+                                echo '</form>';
+                            }
+                        } else {
+                        ?>
+                            <p>Chúng tôi đã gửi email cho bạn, hãy kiểm tra email để download câu trả lời.</p>
+                            <a href="javascript:history.go(-1)" class="button">Quay lại</a>
+                        <?php
+                        }
+                        ?>
+                    </div>
+                    <div class="align_right">
+                        <form action="" method="post">
+                            <?php 
+                                wp_nonce_field('wp_post_nonce', 'wp_post_nonce_field');
+                            ?>
+                            <input type="submit" value="Hoàn tất bài học">
+                        </form>
+                    </div>
+                </article>
             </div>
         </div>
     </div>

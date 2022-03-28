@@ -57,6 +57,7 @@
 }
 .lessons_list{
     list-style: none;
+    overflow: scroll;
     border-radius: 10px;
     border: 1px solid #444;
     padding: 0;

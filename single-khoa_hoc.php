@@ -14,7 +14,6 @@ while (have_posts()) {
             $current_lesson = $course['lessons'];
         }
     }
-    $url_code = '?course=' . base64_encode($current_course_ID . '|' . $current_lesson . '|' . $current_user->ID);
 
     $lesson_title = get_the_title();
     $lessons = get_field('lessons');
@@ -73,6 +72,7 @@ while (have_posts()) {
                             $icon_first = ($lesson_type == "Bài trắc nghiệm")?'<i class="fa-solid fa-circle-question"></i>':'<i class="fa-solid fa-book"></i>';
 
                             if ($active) {
+                                $url_code = '?course=' . base64_encode($current_course_ID . '|' . $current_lesson . '|' . $current_user->ID . '|' . $lesson_id );
                                 if ($current_lesson >= $i) {
                                     if ($current_lesson == $i) {
                                         $next_lesson = $lesson_id;
