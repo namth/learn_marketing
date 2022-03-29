@@ -32,9 +32,7 @@
     
     if ( isset($_POST['post_nonce_field']) &&
         wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce') ) {
-    
-        require_once $dir . '/vendor/autoload.php';
-    
+        
         $mpdf = new \Mpdf\Mpdf();
     
         $data = '<h1>' . $lesson_title . '</h1>';
@@ -199,22 +197,22 @@
                                         echo '<input type="text" name="' . $name_question . '">';
                                         break;
                                 
-                                    case 'Câu hỏi lựa chọn':
+                                    case 'Câu hỏi dài':
+                                        // echo '<textarea name="' . $name_question . '" id="" cols="30" rows="10"></textarea>';
+                                        wp_editor('', $name_question, array('media_buttons'=>false)); 
+                                        break;
+                                        
+                                    default:
                                         $choices = get_field('choices', $qid);
                                         $list_answers = explode(PHP_EOL, trim($choices));
-
-                                        echo '<ul>';
+    
+                                        echo '<ul class="list_answers">';
                                         foreach ($list_answers as $answer) {
                                             echo '<li>';
                                             echo '<input type="checkbox" name="' . $name_question . '[]" value="' . trim($answer) . '"> ' . trim($answer);
                                             echo '</li>';
                                         }
                                         echo '</ul>';
-                                        break;
-                                    
-                                    default:
-                                        // echo '<textarea name="' . $name_question . '" id="" cols="30" rows="10"></textarea>';
-                                        wp_editor('', $name_question, array('media_buttons'=>false)); 
                                         break;
                                 }
                                 echo "</div>";
@@ -224,7 +222,7 @@
                         
                         if (!$answered) {
                             echo "<label>Nhập địa chỉ email của bạn</label>";
-                            echo '<input type="text" name="email" class="my_email">';
+                            echo '<input type="text" name="email" class="my_email" value="' . $current_user->user_email . '">';
                             wp_nonce_field('post_nonce', 'post_nonce_field');
                             echo '<input type="submit" class="button button-primary" value="Nộp bài và gửi kết quả">';
                             echo '</form>';

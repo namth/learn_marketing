@@ -13,6 +13,8 @@ if (is_user_logged_in()) {
     while (have_posts()) {
         the_post();
         
+        require_once __DIR__ . '/vendor/autoload.php';
+        
         $current_user = wp_get_current_user();
         $active = get_field('active','user_' . $current_user->ID);
         $list_courses = get_field('list_courses','user_' . $current_user->ID);

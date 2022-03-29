@@ -165,16 +165,29 @@ do_action( 'flatsome_before_page' );
                             }
                         } else {
                             echo "<div class='answer'>";
-                            $choices = get_field('choices', $qid);
-                            $list_answers = explode(PHP_EOL, trim($choices));
+                            switch ($question_type) {
+                                case 'Câu hỏi ngắn':
+                                    echo '<input type="text" name="' . $name_question . '">';
+                                    break;
+                            
+                                case 'Câu hỏi dài':
+                                    // echo '<textarea name="' . $name_question . '" id="" cols="30" rows="10"></textarea>';
+                                    wp_editor('', $name_question, array('media_buttons'=>false)); 
+                                    break;
+                                    
+                                default:
+                                    $choices = get_field('choices', $qid);
+                                    $list_answers = explode(PHP_EOL, trim($choices));
 
-                            echo '<ul class="list_answers">';
-                            foreach ($list_answers as $answer) {
-                                echo '<li>';
-                                echo '<input type="checkbox" name="' . $name_question . '[]" value="' . trim($answer) . '"> ' . trim($answer);
-                                echo '</li>';
+                                    echo '<ul class="list_answers">';
+                                    foreach ($list_answers as $answer) {
+                                        echo '<li>';
+                                        echo '<input type="checkbox" name="' . $name_question . '[]" value="' . trim($answer) . '"> ' . trim($answer);
+                                        echo '</li>';
+                                    }
+                                    echo '</ul>';
+                                    break;
                             }
-                            echo '</ul>';
                             echo "</div>";
                         }
                         echo "</div>";
