@@ -66,7 +66,7 @@ function register_account() {
         ) {
             $user_login     = strip_tags($_POST['username']);
             $display_name   = strip_tags($_POST['display_name']);
-            $user_email     = $data_user[1];
+            $user_email     = strip_tags($_POST['email']);
             $password       = strip_tags($_POST['password']);
             $confirm_password   = strip_tags($_POST['confirm_password']);
             $error = false;
@@ -133,15 +133,17 @@ function register_account() {
                 if(isset($data_user[1])){
                     echo '<input class="disable" type="email" disabled value="' . $data_user[1] . '">';
                     echo '<input type="hidden" name="active" value="1">';
+                    echo '<input type="hidden" name="email" value="' . $data_user[1] . '">';
                 } else {
-                    echo '<input type="email" name="user_email" id="">';
+                    $email = $user_email?$user_email:"";
+                    echo '<input type="email" name="email" id="" value="'. $email .'">';
                 }
             ?>
             
             <p>Họ và tên</p>
-            <input type="text" name="display_name" id="">
+            <input type="text" name="display_name" id="" value="<?php if (isset($display_name)) echo $display_name; ?>">
             <p>Tên đăng nhập <span class="red">*</span></p>
-            <input type="text" name="username" id="">
+            <input type="text" name="username" id="" value="<?php if (isset($user_login)) echo $user_login; ?>">
             <p>Mật khẩu <span class="red">*</span></p>
             <input type="password" name="password" id="">
             <p>Xác nhận mật khẩu <span class="red">*</span></p>

@@ -93,6 +93,14 @@
         $successful = wp_mail( $to, $subject, $message, $headers, $attachments );
         
         $answered = true;
+
+        # send to admin_email
+        $admin_email = get_field('admin_email','option');
+        $subject = "Bài học: " . $lesson_title . " - từ bạn " . $to;
+
+        if ($admin_email) {
+            $send_admin = wp_mail($admin_email, $subject, $message, $headers, $attachments);
+        }
     }
     
     get_header();

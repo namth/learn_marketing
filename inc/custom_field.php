@@ -377,6 +377,25 @@ if( function_exists('acf_add_local_field_group') ):
 				'media_upload' => 1,
 				'delay' => 0,
 			),
+			array(
+				'key' => 'field_62481293b8075',
+				'label' => 'Admin email',
+				'name' => 'admin_email',
+				'type' => 'text',
+				'instructions' => 'Là email nhận các bài học của thành viên sẽ gửi về từ website.',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'default_value' => '',
+				'placeholder' => '',
+				'prepend' => '',
+				'append' => '',
+				'maxlength' => '',
+			),
 		),
 		'location' => array(
 			array(
