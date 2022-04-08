@@ -15,10 +15,9 @@ function list_khoahoc() {
                     <div class='box box-normal box-text-bottom'>
                         <div class='box-image'>
                             <div class='image-cover' style='padding-top:56.25%;'>
-                            <a href='" . get_the_permalink($course_id) . "'>
-            ";
-            echo get_the_post_thumbnail($course_id);
-            echo "          </a>
+                                <a href='" . get_the_permalink($course_id) . "'>
+                                    " . get_the_post_thumbnail($course_id) . "
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -62,9 +61,10 @@ function list_khoahoc() {
                     <div class='box box-normal box-text-bottom'>
                         <div class='box-image'>
                             <div class='image-cover' style='padding-top:56.25%;'>
-            ";
-            echo get_the_post_thumbnail();
-            echo "          </div>
+                                <a href='" . get_the_permalink($course_id) . "'>
+                                    " . get_the_post_thumbnail() . "
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <div class='box-text'>";

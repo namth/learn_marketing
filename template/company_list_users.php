@@ -21,7 +21,7 @@ function company_list_users() {
                 $link_register = get_bloginfo('url') . "/registration/?register=" . base64_encode($current_user->ID . "|" . $user_email);
                 $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
                 $to = $user_email;
-                $email_title = 'Thư mời đăng ký khoá học marketing';
+                $email_title = 'Mời bạn đăng ký khóa học trên hệ thống của iZiDO';
                 $email_content = 'Bạn hãy click vào link dưới đây để đăng ký tài khoản: ' . $link_register;
                 wp_mail($to, $email_title, $email_content, $headers);
     

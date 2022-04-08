@@ -58,7 +58,7 @@ while (have_posts()) {
                             $course_class = 'active';
                         } else {
                             $course_class = 'not_active';
-                            echo "<span class='warning'><i class='fa-solid fa-circle-exclamation'></i> Bạn chưa kích hoạt tài khoản, hãy <a href='#'>bấm vào đây</a> để kích hoạt trước khi tham gia khoá học</span>";
+                            echo "<span class='warning'><i class='fa-solid fa-circle-exclamation'></i> Bạn chưa kích hoạt tài khoản, hãy <a href='". get_bloginfo('url') ."/email-active'>bấm vào đây</a> để kích hoạt trước khi tham gia khoá học</span>";
                         }
 
                         echo "<ul class='lessons_list " . $course_class . "'>";
@@ -88,7 +88,9 @@ while (have_posts()) {
                                     echo '<b>' . $icon_first . '</i>' . $lesson_title . '</b><span class="locked"><i class="fa-solid fa-lock"></i></span>';
                                 }
                             } else {
+                                echo "<li class='lesson_lock'>";
                                 echo '<b>' . $icon_first . '</i>' . $lesson_title . '</b><span class="locked"><i class="fa-solid fa-lock"></i></span>';
+                                echo "</li>";
                             }
                             
                             echo "</li>";

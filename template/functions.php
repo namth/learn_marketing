@@ -33,7 +33,12 @@ function active_account() {
             $email_title = 'Kích hoạt tài khoản học marketing';
             $email_content = 'Bạn hãy bấm vào link dưới đây để kích hoạt tài khoản: ' . $link_active;
             wp_mail($to, $email_title, $email_content, $headers);
-        }
+            ?>
+            <h1>Gửi email thành công</h1>
+            <p>Bạn hãy kiểm tra email và làm theo hướng dẫn trong email để kích hoạt tài khoản nhé. Cảm ơn bạn!</p>
+            <a href="<?php echo get_bloginfo('url'); ?>" class="btn">Về trang chủ</a>
+            <?php
+        } else {
     ?>
         
             <h1>Kích hoạt tài khoản</h1>
@@ -46,6 +51,7 @@ function active_account() {
             </form>
             
     <?php 
+        }
     } else {
         echo "<p>Bạn chưa đăng nhập. Xin vui lòng đăng nhập để sử dụng các tính năng.</p>";
     }

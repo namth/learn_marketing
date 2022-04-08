@@ -10,7 +10,7 @@ jQuery(document).ready(function ($) {
     });
 
     var width = $('.fixed_div').width();
-    var height = $('.fixed_div').height() + 2;
+    var height = $('.fixed_div').outerHeight() + 2;
     if(height > ($(window).height() - 117) ) {
         height = $(window).height() - 137;
     }
