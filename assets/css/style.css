@@ -76,7 +76,7 @@
 }
 .lessons_list li a:first-child{
     display: block;
-    padding: 8px 20px;
+    padding: 8px 40px 8px 20px;
 }
 .lessons_list li .locked{
     position: absolute;
@@ -253,3 +253,63 @@ a.delete_user svg{
 .list_function li:hover a{
     color: white;
 }
+.comment_source {
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+.comment_source a{
+    font-weight: bold;
+}
+.comment-inner{
+    position: relative;
+}
+.commentmetadata .reply{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+.logged-in-as, .comment-form-comment label{
+    display: none;
+}
+.comment-list .comment.depth-1 {
+    border: 1px solid lightgray;
+    padding: 20px 0 0;
+    margin-bottom: 20px;
+    box-shadow: 1px 3px 5px #dfdfdf;
+}
+.comment-list .comment.depth-1 article{
+    padding: 0 20px;
+}
+.comment-list .comment.depth-1 .children{
+    background: aliceblue;
+    padding: 1em 0 1.5em 4em;
+    margin: 0;
+}
+.videos{
+    text-align: center;
+    background-color: #000000;
+}
+.action_bar{
+    display: flex;
+    box-shadow: 0px 2px 3px lightgray;
+    margin-bottom: 20px;
+}
+.action_bar .back_button{
+    margin: 0;
+    padding: 6px 15px 4px;
+    font-size: 20px;
+}
+.action_bar ul{
+    margin: 0;
+}
+.action_bar ul li{
+    display: table-cell;
+    margin: 0;
+    vertical-align: middle;
+    padding: 8px 20px;
+    border-bottom: 3px solid white;
+}
+.action_bar ul li.active{
+    border-bottom-color: #334862;
+}
+
