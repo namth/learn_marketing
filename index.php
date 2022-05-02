@@ -148,25 +148,36 @@ function misha_submit_ajax_comment(){
 	 * Here is the comment template, you can configure it for your website
 	 * or you can try to find a ready function in your theme files
 	 */
-	$comment_html = '<li ' . comment_class('', null, null, false ) . ' id="comment-' . get_comment_ID() . '">
-		<article class="comment-body" id="div-comment-' . get_comment_ID() . '">
-			<footer class="comment-meta">
-				<div class="comment-author vcard">
-					' . get_avatar( $comment, 100 ) . '
-					<b class="fn">' . get_comment_author_link() . '</b> <span class="says">says:</span>
-				</div>
-				<div class="comment-metadata">
-					<a href="' . esc_url( get_comment_link( $comment->comment_ID ) ) . '">' . sprintf('%1$s at %2$s', get_comment_date(),  get_comment_time() ) . '</a>';
+	$comment_html = '<li ' . comment_class('', null, null, false ) . ' id="li-comment-' . get_comment_ID() . '">
+		<article class="comment-inner" id="comment-' . get_comment_ID() . '">
+            <div class="flex-row align-top">
+                <div class="flex-col">
+                    <div class="comment-author mr-half">
+					' . get_avatar( $comment, 48 ) . '
+                    </div>
+                </div>
+    
+                <div class="flex-col flex-grow"><cite class="strong fn">' . get_comment_author_link() . '</cite>
+				   ';
 					
-					if( $edit_link = get_edit_comment_link() )
-						$comment_html .= '<span class="edit-link"><a class="comment-edit-link" href="' . $edit_link . '">Edit</a></span>';
+					// if( $edit_link = get_edit_comment_link() )
+					// 	$comment_html .= '<span class="edit-link"><a class="comment-edit-link" href="' . $edit_link . '">Edit</a></span>';
 					
-				$comment_html .= '</div>';
 				if ( $comment->comment_approved == '0' )
-					$comment_html .= '<p class="comment-awaiting-moderation">Your comment is awaiting moderation.</p>';
+					$comment_html .= '<em>'._e( 'Your comment is awaiting moderation.', 'flatsome' ).'</em>';
 
-			$comment_html .= '</footer>
-			<div class="comment-content">' . apply_filters( 'comment_text', get_comment_text( $comment ), $comment ) . '</div>
+			$comment_html .= '<br />
+    			<div class="comment-content">
+                    ' . apply_filters( 'comment_text', get_comment_text( $comment ), $comment ) . '
+                    
+                    <div class="comment_source">';
+            if ($comment_depth==1) {
+                $comment_html .=  "<span class='comment_lable'>Từ bài học: </span>
+                        <a>";
+                $comment_html .=     get_the_title($comment->comment_post_ID); 
+                $comment_html .=  "</a>";
+            }
+            $comment_html .= '</div>
 		</article>
 	</li>';
 	echo $comment_html;
@@ -199,7 +210,7 @@ if ( ! function_exists( 'learning_comment' ) ) :
                 <div class="flex-row align-top">
                     <div class="flex-col">
                         <div class="comment-author mr-half">
-                            <?php echo get_avatar( $comment, 70 ); ?>
+                            <?php echo get_avatar( $comment, 48 ); ?>
                         </div>
                     </div>
     
@@ -252,4 +263,21 @@ function wpse150029_change_embed_defaults() {
         'width'  => 800, 
         'height' => 400
     );
+}
+
+# add avatar to login form
+add_action( 'comment_form_logged_in_after', 'psot_comment_form_avatar' );
+add_action( 'comment_form_after_fields', 'psot_comment_form_avatar' );
+function psot_comment_form_avatar()
+{
+  ?>
+   <div class="comment-avatar">
+     <?php 
+     $current_user = wp_get_current_user();
+     if ( ($current_user instanceof WP_User) ) {
+        echo get_avatar( $current_user->user_email, 48 );
+     }
+     ?>
+   </div>
+<?php
 }

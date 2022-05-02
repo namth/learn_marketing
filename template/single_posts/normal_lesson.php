@@ -110,7 +110,7 @@ do_action( 'flatsome_before_page' );
 ?>
 <div id="content" class="content-area normal_lesson" role="main">
     <div class="gallery row-main">
-        <div class="large-3 col">
+        <div class="large-3 col" style="background-color: #f7f7f7;">
             <div class="col-inner page-wrapper">
             <?php 
 

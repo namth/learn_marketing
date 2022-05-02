@@ -64,15 +64,9 @@ do_action( 'flatsome_before_page' );
 ?>
 <div id="content" class="content-area" role="main">
 <div class="gallery row-main">
-    <div class="large-3 col">
+    <div class="large-3 col" style="background-color: #f7f7f7;">
         <div class="col-inner page-wrapper">
         <?php 
-            if ($current_course_id) {
-                echo '<a href="'. get_permalink($current_course_id) .'" class="back_button"><i class="fa-solid fa-arrow-left"></i></a>';
-            } else {
-                echo '<a href="javascript:history.go(-1)" class="back_button"><i class="fa-solid fa-arrow-left"></i></a>';
-            }
-
             $lessons = get_field('lessons', $current_course_id);
 
             echo "<ul class='lessons_list active fixed_div'>";
@@ -113,11 +107,27 @@ do_action( 'flatsome_before_page' );
     </div>
     <div class="large-9 col main_scroll">
         <div class="col-inner page-wrapper">
-        <?php 
-            $link_youtube = get_field('youtube');
-            if ($link_youtube) echo apply_filters('the_content', $link_youtube);
-        ?>
-            <article>
+            <div class="videos">
+            <?php 
+                $link_youtube = get_field('youtube');
+                if ($link_youtube) echo apply_filters('the_content', $link_youtube);
+            ?>
+            </div>
+            <div class="action_bar">
+                <?php 
+                    if ($current_course_id) {
+                        echo '<a href="'. get_permalink($current_course_id) .'" class="back_button"><i class="fa-solid fa-arrow-left"></i></a>';
+                    } else {
+                        echo '<a href="javascript:history.go(-1)" class="back_button"><i class="fa-solid fa-arrow-left"></i></a>';
+                    }
+                ?>
+                <ul>
+                    <li class="active">
+                        <a href="#" data-tab="#main_content"><i class="fa-solid fa-book-open"></i> <b>Nội dung chính</b></a>
+                    </li>
+                </ul>
+            </div>
+            <article id="main_content">
                 <header class="entry-header alignwide">
                     <h1><?php the_title(); ?></h1>
                 </header>

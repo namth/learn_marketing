@@ -69,6 +69,7 @@
     border: 1px solid #444;
     padding: 10px 0;
     margin: 0;
+    background-color: white;
 }
 .lessons_list li{
     margin: 0 !important;
@@ -253,6 +254,12 @@ a.delete_user svg{
 .list_function li:hover a{
     color: white;
 }
+.main_scroll{
+    border-left: 1px solid #bdccd7;
+}
+#main_content{
+    padding-top: 20px;
+}
 .comment_source {
     font-size: 12px;
     margin-bottom: 15px;
@@ -273,17 +280,25 @@ a.delete_user svg{
 }
 .comment-list .comment.depth-1 {
     border: 1px solid lightgray;
-    padding: 20px 0 0;
-    margin-bottom: 20px;
+    padding: 10px 0 0;
+    margin-bottom: 10px;
+    margin-left: 0;
     box-shadow: 1px 3px 5px #dfdfdf;
 }
 .comment-list .comment.depth-1 article{
-    padding: 0 20px;
+    padding: 0 10px;
 }
-.comment-list .comment.depth-1 .children{
+.comment-list .comment.depth-1 > .children{
     background: aliceblue;
-    padding: 1em 0 1.5em 4em;
+    padding: 0 0 0 70px;
     margin: 0;
+}
+.comment-list .comment.depth-1 .children .children,
+.comment-list .comment.depth-1 .children li{
+    margin: 0;
+}
+.comment-list .comment.depth-1 .children article{
+    padding-left: 0;
 }
 .videos{
     text-align: center;
@@ -292,12 +307,16 @@ a.delete_user svg{
 .action_bar{
     display: flex;
     box-shadow: 0px 2px 3px lightgray;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
 .action_bar .back_button{
     margin: 0;
     padding: 6px 15px 4px;
     font-size: 20px;
+}
+.action_bar ul li:hover,
+.action_bar .back_button:hover{
+    background-color: beige;
 }
 .action_bar ul{
     margin: 0;
@@ -312,4 +331,28 @@ a.delete_user svg{
 .action_bar ul li.active{
     border-bottom-color: #334862;
 }
-
+.comment-form > .comment-avatar{
+    padding: 0 0 0 15px;
+    width: auto;
+    display: inline;
+}
+.comment-form > .comment-form-comment{
+    width: calc(100% - 63px);
+}
+.comment-form > .form-submit{
+    text-align: right;
+}
+.comment-form > .comment-form-comment textarea{
+    margin: 0;
+    min-height: 80px;
+}
+.comment-form > .form-submit .submit{
+    margin: 0;
+}
+.list_answers,
+.list_answers li{
+    margin: 0 !important;
+}
+.question{
+    margin-bottom: 20px;
+}

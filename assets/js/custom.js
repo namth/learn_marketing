@@ -85,7 +85,7 @@ jQuery(document).ready(function ($) {
                 data: $(this).serialize() + '&action=ajaxcomments', // send form data + action parameter
                 beforeSend: function(xhr){
                     // what to do just after the form has been submitted
-                    button.addClass('loadingform').val('Loading...');
+                    button.addClass('loadingform').val('Đang xử lý...');
                 },
                 error: function (request, status, error) {
                     if( status == 500 ){
@@ -120,7 +120,7 @@ jQuery(document).ready(function ($) {
                             cancelreplylink.trigger("click");
                         } else {
                             // simple comment
-                            commentlist.append( addedCommentHTML );
+                            commentlist.prepend( addedCommentHTML );
                         }
                     }else{
                         // if no comments yet
@@ -132,7 +132,7 @@ jQuery(document).ready(function ($) {
                 },
                 complete: function(){
                     // what to do after a comment has been added
-                    button.removeClass( 'loadingform' ).val( 'Post Comment' );
+                    button.removeClass( 'loadingform' ).val( 'Phản hồi' );
                 }
             });
         }
