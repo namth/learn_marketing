@@ -242,8 +242,7 @@ if( function_exists('acf_add_local_field_group') ):
 		'active' => 1,
 		'description' => '',
 	));
-	
-		
+
 	acf_add_local_field_group(array(
 		'key' => 'group_62079f653a021',
 		'title' => 'Khoá học',
@@ -268,13 +267,39 @@ if( function_exists('acf_add_local_field_group') ):
 				'button_label' => '',
 				'sub_fields' => array(
 					array(
-						'key' => 'field_62079f654a608',
+						'key' => 'field_627654bf555cc',
+						'label' => 'Tên chương',
+						'name' => 'chapter_name',
+						'type' => 'text',
+						'instructions' => '',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '',
+							'class' => '',
+							'id' => '',
+						),
+						'default_value' => '',
+						'placeholder' => '',
+						'prepend' => '',
+						'append' => '',
+						'maxlength' => '',
+					),
+					array(
+						'key' => 'field_627628460b94f',
 						'label' => 'Bài học',
 						'name' => 'lesson',
 						'type' => 'post_object',
 						'instructions' => '',
 						'required' => 0,
-						'conditional_logic' => 0,
+						'conditional_logic' => array(
+							array(
+								array(
+									'field' => 'field_627654bf555cc',
+									'operator' => '==empty',
+								),
+							),
+						),
 						'wrapper' => array(
 							'width' => '',
 							'class' => '',
@@ -334,7 +359,7 @@ if( function_exists('acf_add_local_field_group') ):
 		'active' => 1,
 		'description' => '',
 	));
-	
+		
 	acf_add_local_field_group(array(
 		'key' => 'group_61d1b94e344a9',
 		'title' => 'Mail option',

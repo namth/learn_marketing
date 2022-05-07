@@ -75,6 +75,13 @@
     margin: 0 !important;
     position: relative;
 }
+.lessons_list li.chapter_name {
+    font-weight: bold;
+    background: blanchedalmond;
+    color: crimson;
+    padding: 10px 20px;
+    border-bottom: 1px solid;
+}
 .lessons_list li a:first-child{
     display: block;
     padding: 8px 40px 8px 20px;
@@ -91,7 +98,7 @@
     color: #3abf0a;
     bottom: 0px;
 }
-.lessons_list.active li:not(.lesson_lock):hover, .current_lesson{
+.lessons_list.active li:not(.lesson_lock, .chapter_name):hover, .current_lesson{
     background: #f2ffcd;
     border-radius: 10px;
 }
@@ -105,7 +112,7 @@
     background: #575757;
 }
 .lesson_lock{
-    background: #bbb;
+    background: #dbdbdb;
     padding: 8px 20px;
 }
 .warning{

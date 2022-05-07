@@ -122,33 +122,38 @@ do_action( 'flatsome_before_page' );
                 foreach ($lessons as $lesson) {
                     $i++;
                     // print_r($lesson);
-                    $lesson_id      = $lesson['lesson']->ID;
-                    $list_lesson[]  = $lesson_id;
-                    $lesson_title   = $lesson['lesson']->post_title;
-                    $lesson_type    = get_field('lesson_type', $lesson_id);
-                    $icon_first     = ($lesson_type == "Bài trắc nghiệm")?'<i class="fa-solid fa-circle-question"></i>':'<i class="fa-solid fa-book"></i>';
+                    $chapter_name = $lesson['chapter_name'];
+                    if (!$chapter_name) {
+                        $lesson_id      = $lesson['lesson']->ID;
+                        $list_lesson[]  = $lesson_id;
+                        $lesson_title   = $lesson['lesson']->post_title;
+                        $lesson_type    = get_field('lesson_type', $lesson_id);
+                        $icon_first     = ($lesson_type == "Bài trắc nghiệm")?'<i class="fa-solid fa-circle-question"></i>':'<i class="fa-solid fa-book"></i>';
 
-                    if ($active) {
-                        $url_code = '?course=' . base64_encode($current_course_id . '|' . $current_lesson . '|' . $current_user->ID . '|' . $lesson_id );
-                        if ($current_lesson >= $i) {
-                            if ($current_lesson == $i) {
-                                $next_lesson = $lesson_id;
-                                $icon_last = '';
-                                echo "<li class='current_lesson'>";
+                        if ($active) {
+                            $url_code = '?course=' . base64_encode($current_course_id . '|' . $current_lesson . '|' . $current_user->ID . '|' . $lesson_id );
+                            if ($current_lesson >= $i) {
+                                if ($current_lesson == $i) {
+                                    $next_lesson = $lesson_id;
+                                    $icon_last = '';
+                                    echo "<li class='current_lesson'>";
+                                } else{
+                                    $icon_last = '<i class="fa-solid fa-check"></i>';
+                                    echo "<li>";
+                                }
+                                echo '<b><a href="' . get_the_permalink($lesson_id) . $url_code . '">' . $icon_first . '</i>' . $lesson_title . '</a></b><span class="check_done">' . $icon_last . '</span>';
                             } else{
-                                $icon_last = '<i class="fa-solid fa-check"></i>';
-                                echo "<li>";
+                                echo "<li class='lesson_lock'>";
+                                echo '<b>' . $icon_first . '</i>' . $lesson_title . '</b><span class="locked"><i class="fa-solid fa-lock"></i></span>';
                             }
-                            echo '<b><a href="' . get_the_permalink($lesson_id) . $url_code . '">' . $icon_first . '</i>' . $lesson_title . '</a></b><span class="check_done">' . $icon_last . '</span>';
-                        } else{
-                            echo "<li class='lesson_lock'>";
+                        } else {
                             echo '<b>' . $icon_first . '</i>' . $lesson_title . '</b><span class="locked"><i class="fa-solid fa-lock"></i></span>';
                         }
+                        
+                        echo "</li>";
                     } else {
-                        echo '<b>' . $icon_first . '</i>' . $lesson_title . '</b><span class="locked"><i class="fa-solid fa-lock"></i></span>';
+                        echo "<li class='chapter_name'>" . $chapter_name . "</li>";
                     }
-                    
-                    echo "</li>";
                 }
                 echo "</ul>";
                 ?>
