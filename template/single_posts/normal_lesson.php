@@ -120,10 +120,10 @@ do_action( 'flatsome_before_page' );
                 $i = 0;
                 $list_lesson = array();
                 foreach ($lessons as $lesson) {
-                    $i++;
                     // print_r($lesson);
                     $chapter_name = $lesson['chapter_name'];
                     if (!$chapter_name) {
+                        $i++;
                         $lesson_id      = $lesson['lesson']->ID;
                         $list_lesson[]  = $lesson_id;
                         $lesson_title   = $lesson['lesson']->post_title;

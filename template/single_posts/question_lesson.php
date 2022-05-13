@@ -72,10 +72,10 @@ do_action( 'flatsome_before_page' );
             echo "<ul class='lessons_list active fixed_div'>";
             $i = 0;
             foreach ($lessons as $lesson) {
-                $i++;
                 // print_r($lesson);
                 $chapter_name = $lesson['chapter_name'];
                 if (!$chapter_name) {
+                    $i++;
                     $lesson_id      = $lesson['lesson']->ID;
                     $list_lesson[]  = $lesson_id;
                     $lesson_title   = $lesson['lesson']->post_title;
