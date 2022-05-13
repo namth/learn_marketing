@@ -64,10 +64,9 @@ while (have_posts()) {
                         echo "<ul class='lessons_list " . $course_class . "'>";
                         $i = 0;
                         foreach ($lessons as $lesson) {
-                            $i++;
-                            // print_r($lesson);
                             $chapter_name = $lesson['chapter_name'];
                             if (!$chapter_name) {
+                                $i++;
                                 $lesson_id = $lesson['lesson']->ID;
                                 $lesson_title = $lesson['lesson']->post_title;
                                 $lesson_type = get_field('lesson_type', $lesson_id);
